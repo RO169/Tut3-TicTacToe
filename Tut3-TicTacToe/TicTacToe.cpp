@@ -1,14 +1,17 @@
 #include "TicTacToe.h"
 #include<iostream>
 using namespace std;
+char posArr[3][3];
 
 TicTacToe::TicTacToe(){}
 
-TicTacToe::TicTacToe(int x = 0, int y = 0, int p = 1, char dec = 'n')
+TicTacToe::TicTacToe(int x1 = 0, int y1 = 0, int x2 = 0, int y2 = 0, int p = 1, char dec = 'n')
 {
 	//default constructor
-	xPos = x;
-	yPos = y;
+	xPos1 = x1;
+	yPos1 = y1;
+	xPos2 = x2;
+	yPos2 = y2;
 	player = p;
 	decision = dec;
 }
@@ -22,58 +25,111 @@ void TicTacToe::welcome()
    	cout << "\n Each player will be prompted to place their letter";
 	cout << "\n in a row and collumn. The first 1 to create 3 adjacent";
 	cout << "\n plays wins! Goodluck!" << endl;
-	cout << "\n************************************************************" << endl;
+	cout << "\n************************************************************" << endl << endl;
 }
 
-void TicTacToe::restart(TicTacToe game)
+void TicTacToe::restart(TicTacToe game, bool &done)
 {
-	cout << "\n\n\n";
-	cout << "\n************************************************************" << endl;
+	
+	
 	cout << "Do you wish to start a new game (y/n) ?" << endl;
 	cin >> game.decision;                                //check if user wants to start a new game 
 	                                                     //draw board if yes
+	cout << "\n************************************************************" << endl;
 	if (game.decision == 'y')
 	{
 		cout << "\n\n\t\tCollumns\n" << endl;
-		cout << "          0\t|1\t|2" << endl << endl; 
-		cout << "        0  \t|\t|\t" << endl;
-		cout << "Rows    1  \t|\t|\t" << endl;
-		cout << "        2  \t|\t|\t" << endl;
+		cout << "          0  |1 | 2" << endl << endl; 
+		cout << "        0  __|__|__" << endl;
+		cout << "Rows    1  __|__|__" << endl;
+		cout << "        2    |  |  " << endl;
 		cout << "\n\n" << endl;
+		
+		for (int i = 0; i < 3; i++)
+		{
+			for (int j = 0; j < 3; j++)
+			{
+				posArr[i][j] = '0';
+			}
+		}
+		
+		game.player = 1;
+		game.move(game, posArr);
 	}
 	else if (game.decision == 'n')                     //exit if no -- with goodbye message
 	{
-		cout << "\n************************************************************" << endl;
-		cout << "Thank You For Playing" << endl;
-		cout << "\n\n Rungiah Games ltd\n" << endl;
-		system("pause");
-		exit(0);
+		
+		cout << " \n Thank You For Playing" << endl;
+		cout << "\n\n Rungiah Games ltd\n\n\n" << endl;
+		done = true;
 	}
 	else
 	{                                                 //check for invalid inputs
 		cout << "\n\n Invalid Entry. \n\n\n\n ";             
-		system("PAUSE");
-		exit(0);
+		done = true;
 	}
 
-	game.player = 1;
-	game.move(game);
+	
 }
 
-void TicTacToe::move(TicTacToe Player)
+void TicTacToe::move(TicTacToe Player, char posArr[][3])
 {
-	
-	cout << "Player " << Player.player << "'s turn\n" << endl;
-	cout << "\n\nPlease enter a Row <enter> and Collumn <enter> to play in" << endl;
-	cin >> Player.xPos >> Player.yPos;
+	cout << "\n************************************************************" << endl;
+	cout << "\n\nPlayer " << Player.player << "'s turn\n" << endl;
+	cout << "\nPlease enter a Row <enter> and Collumn <enter> to play in" << endl;
+	cin >> Player.xPos1 >> Player.yPos1;
+
+	if (Player.xPos1 < 3 && Player.yPos1 < 3)         //check if within array bounds
+	{
+		if (posArr[Player.xPos1][Player.yPos1] == '0')     //check if any player has played in this position
+		{
+			Player.xPos2 = Player.xPos1;
+			Player.yPos2 = Player.yPos1;
+		}
+		else
+		{
+			cout << "\n************************************************************" << endl;
+			cout << "\n\nInvalid Entry" << endl;
+			Player.move(Player, posArr);
+		}
+	}
+	else
+	{
+		cout << "\n************************************************************" << endl;
+		cout << "\n\nInvalid Entry\n" << endl;
+		Player.move(Player, posArr);
+	}
+
+
+	if (Player.player == 1)
+		posArr[Player.xPos2][Player.yPos2] = 'x';
+	else
+		posArr[Player.xPos2][Player.yPos2] = 'o';
 
 	Player.player++;
 		if (Player.player >= 3)
-		{
 			Player.player = 1;
-		}
+	
+		Player.print(Player);
 }
 
-TicTacToe::~TicTacToe()
+void TicTacToe::print(TicTacToe Board)
 {
+	cout << "\n************************************************************\n" << endl;
+	for (int i = 0; i < 3; i++)
+	{
+		cout << "|";
+		for (int j = 0; j < 3; j++)
+		{
+			if (posArr[Board.xPos2][Board.yPos2] != '0')
+				cout << "_ " << posArr[Board.xPos2][Board.yPos2] << " _|";
+			else
+				cout << "__|";
+		}
+		cout << endl;
+	}
+	cout << "\n************************************************************\n\n" << endl;
+
 }
+
+TicTacToe::~TicTacToe(){}

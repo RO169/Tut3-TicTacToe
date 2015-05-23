@@ -11,16 +11,7 @@ int main()
 	
 	while (!done)
 	{
-		
-		Game.restart(Game);
-		for (int i = 0; i < 10; i++)
-		{
-			Game.move(Game);
-			if (i = 9)
-			{
-				done = false;
-			}
-		}
+		Game.restart(Game, done);
 	}
 
 
