@@ -30,11 +30,9 @@ void TicTacToe::welcome()
 
 void TicTacToe::restart(TicTacToe game, bool &done)
 {
-	
-	
 	cout << "Do you wish to start a new game (y/n) ?" << endl;
 	cin >> game.decision;                                //check if user wants to start a new game 
-	                                                     //draw board if yes
+	                                                     //draw board if yes--shows how rows and collumns are numbered
 	cout << "\n************************************************************" << endl;
 	if (game.decision == 'y')
 	{
@@ -49,7 +47,7 @@ void TicTacToe::restart(TicTacToe game, bool &done)
 		{
 			for (int j = 0; j < 3; j++)
 			{
-				posArr[i][j] = '0';
+				posArr[i][j] = '_';
 			}
 		}
 		
@@ -81,7 +79,7 @@ void TicTacToe::move(TicTacToe Player, char posArr[][3])
 
 	if (Player.xPos1 < 3 && Player.yPos1 < 3)         //check if within array bounds
 	{
-		if (posArr[Player.xPos1][Player.yPos1] == '0')     //check if any player has played in this position
+		if (posArr[Player.xPos1][Player.yPos1] == '_')     //check if any player has played in this position
 		{
 			Player.xPos2 = Player.xPos1;
 			Player.yPos2 = Player.yPos1;
@@ -115,21 +113,63 @@ void TicTacToe::move(TicTacToe Player, char posArr[][3])
 
 void TicTacToe::print(TicTacToe Board)
 {
-	cout << "\n************************************************************\n" << endl;
+	cout << "\n************************************************************" << endl;
+	cout << " _ _ _ _ _ _ _ _ _" << endl;
 	for (int i = 0; i < 3; i++)
 	{
 		cout << "|";
 		for (int j = 0; j < 3; j++)
 		{
-			if (posArr[Board.xPos2][Board.yPos2] != '0')
-				cout << "_ " << posArr[Board.xPos2][Board.yPos2] << " _|";
-			else
-				cout << "__|";
+			cout << "_ " << posArr[i][j] << " _|";
 		}
 		cout << endl;
 	}
 	cout << "\n************************************************************\n\n" << endl;
 
+	bool fun = true;
+	Board.isWon(Board,fun, fun);
+}
+
+void TicTacToe::isWon(TicTacToe Status, bool move, bool win)
+{
+	move = true;
+	win = false;
+
+	for (int i = 0; i < 3; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			if (posArr[i][j] == '_')
+				move = false;
+			if (posArr[0][j] == posArr[1][j] && posArr[1][j] == posArr[2][j] && posArr[2][j] != '_')
+				win = true;
+			if (posArr[j][0] == posArr[1][j] && posArr[1][j] == posArr[2][j] && posArr[2][j] != '_')
+				win = true;
+			if (posArr[0][0] == posArr[1][1] && posArr[1][1] == posArr[2][2] && posArr[2][2] != '_')
+				win = true;
+			if (posArr[2][0] == posArr[1][1] && posArr[1][1] == posArr[0][2] && posArr[0][2] != '_')
+				win = true;
+		}
+	}
+
+	
+
+	if (win) 
+	{
+		if (Status.player == 2)
+			Status.player = 1;
+		else
+			Status.player = 2;
+		cout << "Player " << Status.player << " has won. Congratulations!" << endl;
+		Status.restart(Status, win);
+	}
+	else if (!move)
+		Status.move(Status, posArr);
+	else
+	{
+		cout << "Unfortunately the match has ended in a draw, Please play again!";
+		Status.restart(Status, win);
+	}
 }
 
 TicTacToe::~TicTacToe(){}

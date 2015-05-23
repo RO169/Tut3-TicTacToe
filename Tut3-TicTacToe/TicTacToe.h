@@ -19,7 +19,7 @@ public:
 	void restart(TicTacToe game, bool &done);
 	void move(TicTacToe Player, char posArr[][3]);
 	void print(TicTacToe Board);
-	void isWon();
+	void isWon(TicTacToe Status, bool move, bool win);
 
 
 	~TicTacToe();
