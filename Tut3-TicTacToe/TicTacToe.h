@@ -15,7 +15,7 @@ public:
 
 	void welcome();
 	void restart(TicTacToe game);
-	void move();
+	void move(TicTacToe Player);
 	void print();
 	void isWon();
 

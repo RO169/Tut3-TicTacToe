@@ -6,6 +6,7 @@ TicTacToe::TicTacToe(){}
 
 TicTacToe::TicTacToe(int x = 0, int y = 0, int p = 1, char dec = 'n')
 {
+	//default constructor
 	xPos = x;
 	yPos = y;
 	player = p;
@@ -14,6 +15,7 @@ TicTacToe::TicTacToe(int x = 0, int y = 0, int p = 1, char dec = 'n')
 
 void TicTacToe::welcome()
 {
+    //function provides a brief welcome/introduction to the game 
 	cout << "\n************************************************************"<< endl;
 	cout << "\n Welcome to the 2 player game Tic Tac Toe! Player 1 is ";
 	cout << "\n represented by 'x' and Player 2 by 'o'. ";
@@ -28,8 +30,8 @@ void TicTacToe::restart(TicTacToe game)
 	cout << "\n\n\n";
 	cout << "\n************************************************************" << endl;
 	cout << "Do you wish to start a new game (y/n) ?" << endl;
-	cin >> game.decision;
-	
+	cin >> game.decision;                                //check if user wants to start a new game 
+	                                                     //draw board if yes
 	if (game.decision == 'y')
 	{
 		cout << "\n\n\t\tCollumns\n" << endl;
@@ -39,7 +41,7 @@ void TicTacToe::restart(TicTacToe game)
 		cout << "        2  \t|\t|\t" << endl;
 		cout << "\n\n" << endl;
 	}
-	else if (game.decision == 'n')
+	else if (game.decision == 'n')                     //exit if no -- with goodbye message
 	{
 		cout << "\n************************************************************" << endl;
 		cout << "Thank You For Playing" << endl;
@@ -48,13 +50,28 @@ void TicTacToe::restart(TicTacToe game)
 		exit(0);
 	}
 	else
-	{
-		cout << "\n\n Invalid Entry. \n\n\n\n ";
+	{                                                 //check for invalid inputs
+		cout << "\n\n Invalid Entry. \n\n\n\n ";             
 		system("PAUSE");
 		exit(0);
 	}
 
-	game.move();
+	game.player = 1;
+	game.move(game);
+}
+
+void TicTacToe::move(TicTacToe Player)
+{
+	
+	cout << "Player " << Player.player << "'s turn\n" << endl;
+	cout << "\n\nPlease enter a Row <enter> and Collumn <enter> to play in" << endl;
+	cin >> Player.xPos >> Player.yPos;
+
+	Player.player++;
+		if (Player.player >= 3)
+		{
+			Player.player = 1;
+		}
 }
 
 TicTacToe::~TicTacToe()
